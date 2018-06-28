@@ -1,0 +1,22 @@
+language: java
+jdk: oraclejdk8
+
+sudo: false # faster builds
+install: true
+
+env:
+  - TEST_DIR=AtlantisJavaEE-ejb
+  - TEST_DIR=AtlantisJavaEE-war
+
+cache:
+ directories:
+ - $HOME/.m2
+ - $HOME/.m2/repository
+
+script:
+- cd $TEST_DIR && mvn test -X
+
+notifications:
+ email: false
+ slack: atlantisprojectgroup:TWfvPT2fjFOVmh97nehKRzqZ
+
