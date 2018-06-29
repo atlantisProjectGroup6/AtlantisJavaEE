@@ -35,4 +35,13 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
     public List<User> getAllUsers() {
         return dao.findAll(User.class);
     }   
+
+    @Override
+    public Boolean createUserTest(Long id, String name) {
+        User newUser = new User();
+        newUser.setId(id);
+        newUser.setName(name);
+        dao.create(newUser);
+        return true;
+    }
 }

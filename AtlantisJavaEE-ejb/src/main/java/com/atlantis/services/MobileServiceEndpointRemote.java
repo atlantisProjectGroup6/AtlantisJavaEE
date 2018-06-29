@@ -18,6 +18,8 @@ public interface MobileServiceEndpointRemote {
     
     Boolean createAccount(String userLogin, String password);
     
+    Boolean createUserTest(Long id, String name);
+    
     User getUser(Long id);
     
     List<User> getAllUsers();

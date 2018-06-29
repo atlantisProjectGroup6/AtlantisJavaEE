@@ -6,12 +6,18 @@
 package com.atlantis.services;
 
 import com.atlantis.domain.User;
+import java.io.StringReader;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
@@ -59,7 +65,31 @@ public class MobileResource {
         
         return Response.ok(genericList).build();
     }
-
+    
+    @Path("user/createUser")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response pay(String content) {
+        StringReader reader = new StringReader(content);
+        Long id;
+        String name;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject userInfo = jreader.readObject();
+            id = userInfo.getJsonNumber("id").longValue();
+            name = userInfo.getString("name");
+        }
+        
+        Boolean isValid = mobileService.createUserTest(id, name);
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("Non valide").build();
+        }
+        return resp;
+    }
+    
     /**
      * Retrieves representation of an instance of com.atlantis.services.MobileResource
      * @return an instance of java.lang.String
