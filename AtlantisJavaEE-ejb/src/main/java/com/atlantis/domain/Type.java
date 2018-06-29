@@ -13,7 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,35 +23,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author charles
+ * @author miren
  */
 @Entity
-@Table(name="users")
+@Table(name="types")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+    
     //attributes
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID_User")
+    @Column(name="ID_Type")
     @XmlElement
     private Integer id;
-    
-    @Column(name="Login")
+
+    @Column(name="Type")
     @XmlElement
-    private String login;
-    
-    @Column(name="Password")
-    @XmlElement
-    private String password;
-    
-    //relations
-    @ManyToMany(mappedBy="users")
-    private List<Device> devices = new ArrayList<>();
+    private String type;
 
     //getters and setters
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -59,23 +60,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    //relations
+    @OneToMany(mappedBy="type")
+    private List<Device> devices = new ArrayList<>();
     
-    //methods    
+    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -86,10 +75,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Type)) {
             return false;
         }
-        User other = (User) object;
+        Type other = (Type) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,6 +87,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.User[ id=" + id + " ]";
+        return "com.atlantis.domain.Type[ id=" + id + " ]";
     }
+    
 }

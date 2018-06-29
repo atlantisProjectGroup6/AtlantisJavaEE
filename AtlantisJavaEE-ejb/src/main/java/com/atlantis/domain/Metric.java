@@ -6,14 +6,14 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,35 +22,64 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author charles
+ * @author miren
  */
 @Entity
-@Table(name="users")
+@Table(name="metrics")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+    
     //attributes
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID_User")
     @XmlElement
+    @Column(name="ID_Metric")
     private Integer id;
     
-    @Column(name="Login")
+    @Column(name="Value")
     @XmlElement
-    private String login;
-    
-    @Column(name="Password")
-    @XmlElement
-    private String password;
-    
-    //relations
-    @ManyToMany(mappedBy="users")
-    private List<Device> devices = new ArrayList<>();
+    private String value;
 
+    @Column(name="Date")
+    @XmlElement
+    private Timestamp date;
+
+    @Column(name="DeviceID_Device")
+    @XmlElement
+    private Integer deviceID;
+    
+    //Relations 
+    @ManyToOne
+    @JoinColumn (name="ID_Device")
+    private Device device;
+    
     //getters and setters
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public Integer getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(Integer deviceID) {    
+        this.deviceID = deviceID;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -59,23 +88,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    //methods    
+    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -86,10 +99,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Metric)) {
             return false;
         }
-        User other = (User) object;
+        Metric other = (Metric) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,6 +111,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.User[ id=" + id + " ]";
+        return "com.atlantis.domain.Metric[ id=" + id + " ]";
     }
+    
 }

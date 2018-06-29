@@ -13,7 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,35 +25,71 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author charles
+ * @author miren
  */
 @Entity
-@Table(name="users")
+@Table(name="devices")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+    
     //attributes
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID_User")
     @XmlElement
+    @Column(name="ID_Device")
     private Integer id;
-    
-    @Column(name="Login")
-    @XmlElement
-    private String login;
-    
-    @Column(name="Password")
-    @XmlElement
-    private String password;
-    
-    //relations
-    @ManyToMany(mappedBy="users")
-    private List<Device> devices = new ArrayList<>();
 
+    @Column(name="Mac")
+    @XmlElement
+    private String mac;
+    
+    @Column(name="TypeID_Type")
+    @XmlElement
+    private Integer typeID;
+    
+    @Column(name="Name")
+    @XmlElement
+    private String name;
+    
+    //Relations
+    @ManyToOne
+    @JoinColumn (name="ID_Type")
+    private Type type;
+    
+    @OneToMany(mappedBy="device")
+    private List<Metric> metrics = new ArrayList<>();
+    
+    @ManyToMany
+    private List<User> users = new ArrayList<>();
+    
     //getters and setters
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
+    public Integer getTypeID() {
+        return typeID;
+    }
+
+    public void setTypeID(Integer typeID) {
+        this.typeID = typeID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
     public Integer getId() {
         return id;
     }
@@ -59,23 +98,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    //methods    
+    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -86,10 +109,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Device)) {
             return false;
         }
-        User other = (User) object;
+        Device other = (Device) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,6 +121,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.User[ id=" + id + " ]";
+        return "com.atlantis.domain.Device[ id=" + id + " ]";
     }
+    
 }
