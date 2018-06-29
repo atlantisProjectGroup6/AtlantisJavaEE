@@ -6,14 +6,12 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,7 +32,7 @@ public class Type implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //attributes
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID_Type")
     @XmlElement
     private Integer id;
@@ -42,6 +40,10 @@ public class Type implements Serializable {
     @Column(name="Type")
     @XmlElement
     private String type;
+    
+    //relations
+    @OneToMany(mappedBy="type")
+    private List<Device> devices;
 
     //getters and setters
     public String getType() {
@@ -60,9 +62,13 @@ public class Type implements Serializable {
         this.id = id;
     }
 
-    //relations
-    @OneToMany(mappedBy="type")
-    private List<Device> devices = new ArrayList<>();
+    public List<Device> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
     
     //methods
     @Override

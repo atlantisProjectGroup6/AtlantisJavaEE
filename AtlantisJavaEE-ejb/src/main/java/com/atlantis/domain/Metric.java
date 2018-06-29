@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Metric implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //attributes
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlElement
     @Column(name="ID_Metric")
     private Integer id;
@@ -44,15 +45,11 @@ public class Metric implements Serializable {
 
     @Column(name="Date")
     @XmlElement
-    private Timestamp date;
-
-    @Column(name="DeviceID_Device")
-    @XmlElement
-    private Integer deviceID;
+    private Integer date;
     
     //Relations 
-    @ManyToOne
-    @JoinColumn (name="ID_Device")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="AddressMAC_Device")
     private Device device;
     
     //getters and setters
@@ -64,20 +61,12 @@ public class Metric implements Serializable {
         this.value = value;
     }
 
-    public Timestamp getDate() {
+    public Integer getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Integer date) {
         this.date = date;
-    }
-
-    public Integer getDeviceID() {
-        return deviceID;
-    }
-
-    public void setDeviceID(Integer deviceID) {    
-        this.deviceID = deviceID;
     }
 
     public Integer getId() {
@@ -86,6 +75,14 @@ public class Metric implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
     //methods

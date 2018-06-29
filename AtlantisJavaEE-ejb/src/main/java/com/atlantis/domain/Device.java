@@ -6,12 +6,10 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -36,51 +34,30 @@ public class Device implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //attributes
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @XmlElement
-    @Column(name="ID_Device")
-    private Integer id;
-
-    @Column(name="Mac")
-    @XmlElement
-    private String mac;
-    
-    @Column(name="TypeID_Type")
-    @XmlElement
-    private Integer typeID;
+    @Column(name="MAC_Address")
+    private String MACAddress;
     
     @Column(name="Name")
     @XmlElement
     private String name;
     
     //Relations
-    @ManyToOne
-    @JoinColumn (name="ID_Type")
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TypeID_Type")
+    @XmlElement
     private Type type;
     
-    @OneToMany(mappedBy="device")
-    private List<Metric> metrics = new ArrayList<>();
+    @ManyToMany(mappedBy="devices")
+    private List<User> users;
     
-    @ManyToMany
-    private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy="device")
+    private List<Metric> metrics;   
+
     
     //getters and setters
-    public String getMac() {
-        return mac;
-    }
-
-    public void setMac(String mac) {
-        this.mac = mac;
-    }
-
-    public Integer getTypeID() {
-        return typeID;
-    }
-
-    public void setTypeID(Integer typeID) {
-        this.typeID = typeID;
-    }
-
     public String getName() {
         return name;
     }
@@ -88,21 +65,44 @@ public class Device implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    public Integer getId() {
-        return id;
+
+    public String getMACAddress() {
+        return MACAddress;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMACAddress(String MACAddress) {
+        this.MACAddress = MACAddress;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public List<Metric> getMetrics() {
+        return metrics;
+    }
+
+    public void setMetrics(List<Metric> metrics) {
+        this.metrics = metrics;
     }
 
     //methods
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (MACAddress != null ? MACAddress.hashCode() : 0);
         return hash;
     }
 
@@ -113,7 +113,7 @@ public class Device implements Serializable {
             return false;
         }
         Device other = (Device) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.MACAddress == null && other.MACAddress != null) || (this.MACAddress != null && !this.MACAddress.equals(other.MACAddress))) {
             return false;
         }
         return true;
@@ -121,7 +121,7 @@ public class Device implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.Device[ id=" + id + " ]";
+        return "com.atlantis.domain.Device[ id=" + MACAddress + " ]";
     }
     
 }

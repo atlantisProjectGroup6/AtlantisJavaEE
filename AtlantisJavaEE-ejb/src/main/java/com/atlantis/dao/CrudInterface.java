@@ -13,7 +13,8 @@ import java.util.List;
  */
 public interface CrudInterface {
    public <T> T create (T t);
-    public <T> T find(Class<T> type, Long id);//on retourne l'entité
+    public <T> T find(Class<T> type, Integer id);
+    public <T> T findStringId(Class<T> type, String id);
     public <T> T update(T t);
     public void delete(Object t);
     public <T> List<T> findAll(Class<T> type); 

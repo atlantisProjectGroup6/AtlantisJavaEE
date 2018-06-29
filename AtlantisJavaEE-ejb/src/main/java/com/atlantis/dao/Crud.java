@@ -30,7 +30,12 @@ public class Crud implements CrudInterface {
     }  
     
     @Override
-    public <T> T find(Class<T> type, Long id) {
+    public <T> T find(Class<T> type, Integer id) {
+        return em.find(type, id);
+    }
+    
+    @Override
+    public <T> T findStringId(Class<T> type, String id) {
         return em.find(type, id);
     }
     

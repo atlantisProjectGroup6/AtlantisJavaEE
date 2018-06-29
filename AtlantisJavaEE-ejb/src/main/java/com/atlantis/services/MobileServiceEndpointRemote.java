@@ -16,11 +16,11 @@ import javax.ejb.Remote;
 @Remote
 public interface MobileServiceEndpointRemote {
     
+    void createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId);
+    
     Boolean createAccount(String userLogin, String password);
     
-    Boolean createUserTest(Long id, String name);
-    
-    User getUser(Long id);
+    User getUser(Integer id);
     
     List<User> getAllUsers();
 }

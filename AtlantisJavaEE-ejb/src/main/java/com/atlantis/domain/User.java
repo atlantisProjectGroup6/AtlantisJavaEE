@@ -6,13 +6,12 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,7 +32,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
    
     //attributes
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @Column(name="ID_User")
     @XmlElement
     private Integer id;
@@ -42,13 +41,13 @@ public class User implements Serializable {
     @XmlElement
     private String login;
     
-    @Column(name="Password")
-    @XmlElement
-    private String password;
-    
     //relations
-    @ManyToMany(mappedBy="users")
-    private List<Device> devices = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+        name="Users_Devices",
+        joinColumns=@JoinColumn(name="UserID_User", referencedColumnName="ID_User"),
+        inverseJoinColumns=@JoinColumn(name="AddressMAC_DeviceU", referencedColumnName="MAC_Address"))
+    private List<Device> devices;
 
     //getters and setters
     public Integer getId() {
@@ -67,12 +66,12 @@ public class User implements Serializable {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
+    public List<Device> getDevices() {
+        return devices;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
     }
     
     //methods    

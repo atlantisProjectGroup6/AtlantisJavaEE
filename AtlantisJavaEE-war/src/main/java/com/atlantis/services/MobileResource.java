@@ -35,13 +35,37 @@ public class MobileResource {
     
     @EJB
     private MobileServiceEndpointRemote mobileService;
-
+    
     public MobileResource() {}
+    
+    @Path("addMetric")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addMetric(String content) {
+        StringReader reader = new StringReader(content);
+        
+        String MACAddress;
+        String deviceName;
+        Integer timestamp;
+        String value;
+        Integer typeId;
+        
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject metricInfo = jreader.readObject();
+            MACAddress = metricInfo.getString("mac");
+            deviceName = metricInfo.getString("name");
+            timestamp = metricInfo.getJsonNumber("timestamp").intValue();
+            value = metricInfo.getString("value");
+            typeId = metricInfo.getJsonNumber("type").intValue();
+        }
+        
+        mobileService.createRawData(MACAddress, deviceName, timestamp, value, typeId);
+    }
     
     @Path("user/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getUser (@PathParam("id") Long userId) {
+    public Response getUser (@PathParam("id") Integer userId) {
         User user = mobileService.getUser(userId);
         
         if(user == null){
@@ -71,15 +95,15 @@ public class MobileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response pay(String content) {
         StringReader reader = new StringReader(content);
-        Long id;
-        String name;
+        String userLogin;
+        String password;
         try(JsonReader jreader = Json.createReader(reader)) {
             JsonObject userInfo = jreader.readObject();
-            id = userInfo.getJsonNumber("id").longValue();
-            name = userInfo.getString("name");
+            userLogin = userInfo.getString("userLogin");
+            password = userInfo.getString("password");
         }
         
-        Boolean isValid = mobileService.createUserTest(id, name);
+        Boolean isValid = mobileService.createAccount(userLogin, password);
         
         Response resp = null;
         if(isValid) {
