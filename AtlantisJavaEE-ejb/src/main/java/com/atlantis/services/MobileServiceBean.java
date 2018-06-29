@@ -10,6 +10,7 @@ import com.atlantis.domain.Device;
 import com.atlantis.domain.Metric;
 import com.atlantis.domain.Type;
 import com.atlantis.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,36 +26,54 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
     private CrudInterface dao;
     
     @Override
-    public void createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId) {
-        Device myDevice = new Device();
-        Metric myMetric = new Metric();
+    public Boolean createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId) {
+        Device device = new Device();
+        Metric metric = new Metric();
         
         if(dao.findStringId(Device.class, MACAddress) == null){
             
             Type deviceType = dao.find(Type.class, typeId);
             
-            myDevice.setMACAddress(MACAddress);
-            myDevice.setType(deviceType);
-            myDevice.setName(deviceName);
-            dao.create(myDevice);
+            device.setMACAddress(MACAddress);
+            device.setType(deviceType);
+            device.setName(deviceName);
+            dao.create(device);
             
         } else {
-            myDevice = dao.findStringId(Device.class, MACAddress);
+            device = dao.findStringId(Device.class, MACAddress);
         }
         
-        myMetric.setDate(timestamp);
-        myMetric.setValue(value);
-        myMetric.setDevice(myDevice);
+        metric.setDate(timestamp);
+        metric.setValue(value);
+        metric.setDevice(device);
         
-        dao.create(myMetric);
+        if(dao.create(metric) == null) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
+    @Override
+    public List<Device> getUserDevices(String userId) {
+        User user = dao.findStringId(User.class, userId);
+        
+        List<Device> userDevices = user.getDevices(); 
+        userDevices.size(); // LAZY instantiation
+        return userDevices;
     }
     
     @Override
-    public Boolean createAccount(String userLogin, String password) {
-        User newUser = new User();
-        newUser.setLogin(userLogin);
-        dao.create(newUser);
-        return true;
+    public Boolean createAccount(String userId) {
+        if(dao.findStringId(User.class, userId) == null) {
+            User newUser = new User();
+            newUser.setId(userId);
+
+            dao.create(newUser);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package com.atlantis.services;
 
+import com.atlantis.domain.Device;
 import com.atlantis.domain.User;
 import java.util.List;
 import javax.ejb.Remote;
@@ -16,9 +17,11 @@ import javax.ejb.Remote;
 @Remote
 public interface MobileServiceEndpointRemote {
     
-    void createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId);
+    Boolean createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId);
     
-    Boolean createAccount(String userLogin, String password);
+    List<Device> getUserDevices(String userId);
+    
+    Boolean createAccount(String userId);
     
     User getUser(Integer id);
     

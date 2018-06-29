@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,12 +36,8 @@ public class User implements Serializable {
     @Id
     @Column(name="ID_User")
     @XmlElement
-    private Integer id;
-    
-    @Column(name="Login")
-    @XmlElement
-    private String login;
-    
+    private String id;
+
     //relations
     @ManyToMany
     @JoinTable(
@@ -50,22 +47,15 @@ public class User implements Serializable {
     private List<Device> devices;
 
     //getters and setters
-    public Integer getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
+    
     public List<Device> getDevices() {
         return devices;
     }

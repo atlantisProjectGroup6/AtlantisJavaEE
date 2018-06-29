@@ -5,6 +5,7 @@
  */
 package com.atlantis.services;
 
+import com.atlantis.domain.Device;
 import com.atlantis.domain.User;
 import java.io.StringReader;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MobileResource {
     @Path("addMetric")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addMetric(String content) {
+    public Response addMetric(String content) {
         StringReader reader = new StringReader(content);
         
         String MACAddress;
@@ -59,13 +60,60 @@ public class MobileResource {
             typeId = metricInfo.getJsonNumber("type").intValue();
         }
         
-        mobileService.createRawData(MACAddress, deviceName, timestamp, value, typeId);
+        Boolean isValid = mobileService.createRawData(MACAddress, deviceName, timestamp, value, typeId);
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("n° CB invalide").build();
+        }
+        return resp;
+        
+        
     }
     
-    @Path("user/{id}")
+    @Path("user/{userId}/devices")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getUser (@PathParam("id") Integer userId) {
+    public Response getUserDevices (@PathParam("userId") String userId) {
+        List<Device> userDevices = mobileService.getUserDevices(userId);
+        
+        if(userDevices == null){
+            throw new NotFoundException();
+        }
+        
+        GenericEntity<List<Device>> genericList = new GenericEntity<List<Device>>(userDevices){};
+        
+        return Response.ok(genericList).build();
+    }
+    
+    @Path("addUser")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createUser(String content) {
+        StringReader reader = new StringReader(content);
+        String userId;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject userInfo = jreader.readObject();
+            userId = userInfo.getString("userId");
+        }
+        
+        Boolean isValid = mobileService.createAccount(userId);
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("User already exist.").build();
+        }
+        return resp;
+    }
+    
+    @Path("user/{userId}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUser (@PathParam("userId") Integer userId) {
         User user = mobileService.getUser(userId);
         
         if(user == null){
@@ -88,30 +136,6 @@ public class MobileResource {
         GenericEntity<List<User>> genericList = new GenericEntity<List<User>>(allUsers){};
         
         return Response.ok(genericList).build();
-    }
-    
-    @Path("user/createUser")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response pay(String content) {
-        StringReader reader = new StringReader(content);
-        String userLogin;
-        String password;
-        try(JsonReader jreader = Json.createReader(reader)) {
-            JsonObject userInfo = jreader.readObject();
-            userLogin = userInfo.getString("userLogin");
-            password = userInfo.getString("password");
-        }
-        
-        Boolean isValid = mobileService.createAccount(userLogin, password);
-        
-        Response resp = null;
-        if(isValid) {
-            resp = Response.accepted().build();
-        } else {
-            resp = Response.status(400).entity("Non valide").build();
-        }
-        return resp;
     }
     
     /**
