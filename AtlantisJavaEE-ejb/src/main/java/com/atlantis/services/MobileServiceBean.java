@@ -20,6 +20,11 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
 
     @Inject
     private CrudInterface dao;
+    
+    @Override
+    public Boolean createAccount(String userLogin, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public User getUser(Long id) {
@@ -29,5 +34,5 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
     @Override
     public List<User> getAllUsers() {
         return dao.findAll(User.class);
-    }
+    }   
 }

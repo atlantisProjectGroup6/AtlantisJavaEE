@@ -16,6 +16,8 @@ import javax.ejb.Remote;
 @Remote
 public interface MobileServiceEndpointRemote {
     
+    Boolean createAccount(String userLogin, String password);
+    
     User getUser(Long id);
     
     List<User> getAllUsers();
