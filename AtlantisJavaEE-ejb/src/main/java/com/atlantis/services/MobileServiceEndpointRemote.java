@@ -6,6 +6,7 @@
 package com.atlantis.services;
 
 import com.atlantis.domain.User;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -15,8 +16,7 @@ import javax.ejb.Remote;
 @Remote
 public interface MobileServiceEndpointRemote {
     
-    User createUser();
-    
     User getUser(Long id);
     
+    List<User> getAllUsers();
 }

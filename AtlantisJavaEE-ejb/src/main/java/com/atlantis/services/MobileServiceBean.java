@@ -5,10 +5,10 @@
  */
 package com.atlantis.services;
 
-import com.atlantis.dao.UserDAO;
+import com.atlantis.dao.CrudInterface;
 import com.atlantis.domain.User;
+import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.inject.Inject;
 
 /**
@@ -19,19 +19,15 @@ import javax.inject.Inject;
 public class MobileServiceBean implements MobileServiceEndpointRemote {
 
     @Inject
-    private UserDAO userDAO;
-    
-    @Override
-    public User createUser() {
-        User user = new User();
-        user.setId(21L);
-        user.setName("Jean Teston");
-        return userDAO.createOrUpdate(user);
-    }
+    private CrudInterface dao;
 
     @Override
     public User getUser(Long id) {
-        User user = userDAO.find(id);
-        return user;
+        return dao.find(User.class, id);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return dao.findAll(User.class);
     }
 }

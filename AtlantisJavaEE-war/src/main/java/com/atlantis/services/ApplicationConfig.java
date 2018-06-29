@@ -5,7 +5,6 @@
  */
 package com.atlantis.services;
 
-import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
