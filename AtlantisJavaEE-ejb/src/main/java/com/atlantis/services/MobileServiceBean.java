@@ -75,36 +75,20 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
         }
         return false;
     }
+    
+    @Override
+    public List<Metric> getLatestMetrics(String MACAddress, int timestamp) {
+        List<Metric> metricsFromDate = new ArrayList<>();
+        Device device = dao.findStringId(Device.class, MACAddress);
+        if(device != null){
+            metricsFromDate = device.getMetrics();
+        }
+        metricsFromDate.size(); // LAZY instantiation
+        return metricsFromDate;
+    }
 
     @Override
-    public User getUser(Integer id) {
-        
-//        Device myDevice = dao.findStringId(Device.class, "SLDLSDL54");
-//        Metric myMetric = new Metric();
-//        
-//        myMetric.setDate(55555555);
-//        myMetric.setValue("25");
-//        
-//        myMetric.setDevice(myDevice);
-//        
-//        dao.update(myMetric);
-        
-//        Device myDevice = dao.findStringId(Device.class, "SLDLSDL54");
-//        Type temperature = dao.find(Type.class, 2);
-//        
-//        myDevice.setType(temperature);
-//        
-//        dao.update(myDevice);
-        
-//        User myUser = dao.find(User.class, 1);
-//        Device myDevice = dao.findStringId(Device.class, "SLDLSDL54");
-//        
-//        List<Device> userDevices = myUser.getDevices();
-//        if(!userDevices.contains(myDevice)){
-//            userDevices.add(myDevice);
-//            myUser.setDevices(userDevices);
-//        }
-        
+    public User getUser(Integer id) {        
         return dao.find(User.class, id);
     }
 

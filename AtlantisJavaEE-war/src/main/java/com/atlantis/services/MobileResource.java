@@ -6,6 +6,7 @@
 package com.atlantis.services;
 
 import com.atlantis.domain.Device;
+import com.atlantis.domain.Metric;
 import com.atlantis.domain.User;
 import java.io.StringReader;
 import java.util.List;
@@ -108,6 +109,31 @@ public class MobileResource {
             resp = Response.status(400).entity("User already exist.").build();
         }
         return resp;
+    }
+    
+    @Path("latestMetrics")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestMetrics(String content) {
+        StringReader reader = new StringReader(content);
+        String deviceMac;
+        int timestamp;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject userInfo = jreader.readObject();
+            deviceMac = userInfo.getString("deviceMac");
+            timestamp = userInfo.getJsonNumber("timestamp").intValue();
+        }
+        
+        List<Metric> latestMetrics = mobileService.getLatestMetrics(deviceMac, timestamp);
+        
+        if(latestMetrics == null){
+            throw new NotFoundException();
+        }
+        
+        GenericEntity<List<Metric>> genericList = new GenericEntity<List<Metric>>(latestMetrics){};
+        
+        return Response.ok(genericList).build();
     }
     
     @Path("user/{userId}")

@@ -93,6 +93,14 @@ public class Device implements Serializable {
         this.metrics = metrics;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     //methods
     @Override
     public int hashCode() {
