@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,6 +41,7 @@ public class User implements Serializable {
 
     //relations
     @ManyToMany
+    @XmlTransient
     @JoinTable(
         name="Users_Devices",
         joinColumns=@JoinColumn(name="UserID_User", referencedColumnName="ID_User"),
@@ -55,7 +57,7 @@ public class User implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public List<Device> getDevices() {
         return devices;
     }
@@ -63,7 +65,7 @@ public class User implements Serializable {
     public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
-    
+       
     //methods    
     @Override
     public int hashCode() {

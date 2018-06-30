@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -51,9 +52,11 @@ public class Device implements Serializable {
     private Type type;
     
     @ManyToMany(mappedBy="devices")
+    @XmlTransient
     private List<User> users;
     
     @OneToMany(mappedBy="device")
+    @XmlTransient
     private List<Metric> metrics;   
 
     
@@ -72,14 +75,6 @@ public class Device implements Serializable {
 
     public void setMACAddress(String MACAddress) {
         this.MACAddress = MACAddress;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     public Type getType() {
