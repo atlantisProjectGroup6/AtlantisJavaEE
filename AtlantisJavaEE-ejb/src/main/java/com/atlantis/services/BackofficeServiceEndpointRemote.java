@@ -21,6 +21,10 @@ public interface BackofficeServiceEndpointRemote {
     
     List<User> getAllUsers();
     
+    List<Device> getUserDevices(String userId);
+    
+    List<User> getDeviceUsers(String deviceMAC);
+    
     Boolean createAssociation(String deviceMAC, String idUser);
     
     Boolean loginAdmin(String adminLogin, String adminPassword);

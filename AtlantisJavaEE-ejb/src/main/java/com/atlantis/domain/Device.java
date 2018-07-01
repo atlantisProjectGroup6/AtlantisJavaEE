@@ -44,8 +44,11 @@ public class Device implements Serializable {
     @XmlElement
     private String name;
     
-    //Relations
+    @Column(name="TypeID_Type", updatable=false, insertable=false)
+    @XmlElement
+    private int typeId;
     
+    //Relations
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="TypeID_Type")
     @XmlElement

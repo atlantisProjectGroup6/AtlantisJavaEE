@@ -61,6 +61,7 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
         
         List<Device> userDevices = user.getDevices(); 
         userDevices.size(); // LAZY instantiation
+        
         return userDevices;
     }
     

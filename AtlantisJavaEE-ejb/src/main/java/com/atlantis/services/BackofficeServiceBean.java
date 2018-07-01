@@ -31,6 +31,24 @@ public class BackofficeServiceBean implements BackofficeServiceEndpointRemote {
     public List<User> getAllUsers() {
         return dao.findAll(User.class);
     }
+    
+    @Override
+    public List<Device> getUserDevices(String userId) {
+        User user = dao.findStringId(User.class, userId);
+        
+        List<Device> userDevices = user.getDevices(); 
+        userDevices.size(); // LAZY instantiation
+        return userDevices;
+    }
+
+    @Override
+    public List<User> getDeviceUsers(String deviceMAC) {
+        Device device = dao.findStringId(Device.class, deviceMAC);
+        
+        List<User> deviceUsers = device.getUsers(); 
+        deviceUsers.size(); // LAZY instantiation
+        return deviceUsers;
+    }
 
     @Override
     public Boolean createAssociation(String deviceMAC, String idUser) {
@@ -51,6 +69,5 @@ public class BackofficeServiceBean implements BackofficeServiceEndpointRemote {
     @Override
     public Boolean loginAdmin(String adminLogin, String adminPassword) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }

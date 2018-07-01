@@ -23,6 +23,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -67,6 +68,36 @@ public class BackofficeResource {
         }
         
         GenericEntity<List<User>> genericList = new GenericEntity<List<User>>(allUsers){};
+        
+        return Response.ok(genericList).build();
+    }
+    
+    @Path("user/{userId}/devices")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserDevices (@PathParam("userId") String userId) {
+        List<Device> userDevices = backofficeService.getUserDevices(userId);
+        
+        if(userDevices == null){
+            throw new NotFoundException();
+        }
+        
+        GenericEntity<List<Device>> genericList = new GenericEntity<List<Device>>(userDevices){};
+        
+        return Response.ok(genericList).build();
+    }
+    
+    @Path("device/{devicesMac}/users")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getDeviceUsers (@PathParam("devicesMac") String devicesMac) {
+        List<User> deviceUsers = backofficeService.getDeviceUsers(devicesMac);
+        
+        if(deviceUsers == null){
+            throw new NotFoundException();
+        }
+        
+        GenericEntity<List<User>> genericList = new GenericEntity<List<User>>(deviceUsers){};
         
         return Response.ok(genericList).build();
     }

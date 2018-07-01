@@ -67,7 +67,7 @@ public class MobileResource {
         if(isValid) {
             resp = Response.accepted().build();
         } else {
-            resp = Response.status(400).entity("n° CB invalide").build();
+            resp = Response.accepted().build();
         }
         return resp;
         
@@ -101,12 +101,11 @@ public class MobileResource {
         }
         
         Boolean isValid = mobileService.createAccount(userId);
-        
         Response resp = null;
         if(isValid) {
             resp = Response.accepted().build();
         } else {
-            resp = Response.status(400).entity("User already exist.").build();
+            resp = Response.accepted().build();
         }
         return resp;
     }
