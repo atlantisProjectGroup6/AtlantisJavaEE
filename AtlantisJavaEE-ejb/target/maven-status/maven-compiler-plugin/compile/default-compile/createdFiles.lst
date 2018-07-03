@@ -1,6 +1,0 @@
-com/atlantis/domain/User_.class
-com/atlantis/domain/User.class
-com/atlantis/services/MobileServiceEndpointRemote.class
-com/atlantis/services/MobileServiceBean.class
-com/atlantis/dao/CrudInterface.class
-com/atlantis/dao/Crud.class

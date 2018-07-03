@@ -7,59 +7,61 @@ package com.atlantis.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author charles
+ * @author miren
  */
 @Entity
-@Table(name="users")
+@Table(name="types")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
-    //attributes
-    @Id
-    @Column(name="ID_User")
-    @XmlElement
-    private String id;
     
-    @Column(name="name")
+    //attributes
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID_Type")
     @XmlElement
-    private String name;
+    private Integer id;
+
+    @Column(name="Type")
+    @XmlElement
+    private String type;
     
     //relations
-    @ManyToMany
+    @OneToMany(mappedBy="type")
     @XmlTransient
-    @JoinTable(
-        name="Users_Devices",
-        joinColumns=@JoinColumn(name="UserID_User", referencedColumnName="ID_User"),
-        inverseJoinColumns=@JoinColumn(name="AddressMAC_DeviceU", referencedColumnName="MAC_Address"))
     private List<Device> devices;
 
     //getters and setters
+    public String getType() {
+        return type;
+    }
 
-    public String getId() {
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -70,16 +72,8 @@ public class User implements Serializable {
     public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-       
-    //methods    
+    
+    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -90,10 +84,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Type)) {
             return false;
         }
-        User other = (User) object;
+        Type other = (Type) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -102,6 +96,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.User[ id=" + id + " ]";
+        return "com.atlantis.domain.Type[ id=" + id + " ]";
     }
+    
 }

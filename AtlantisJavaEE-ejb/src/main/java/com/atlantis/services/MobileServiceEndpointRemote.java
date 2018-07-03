@@ -5,6 +5,8 @@
  */
 package com.atlantis.services;
 
+import com.atlantis.domain.Device;
+import com.atlantis.domain.Metric;
 import com.atlantis.domain.User;
 import java.util.List;
 import javax.ejb.Remote;
@@ -15,8 +17,26 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface MobileServiceEndpointRemote {
+
+    Boolean createRawData(String MACAddress, String deviceName, Integer timestamp, String value, Integer typeId);
     
-    User getUser(Long id);
+    List<Device> getUserDevices(String userId);
+    
+    Boolean createAccount(String userId);
+    
+    Boolean updateAccount(String userId, String name);
+    
+    List<Metric> getLatestMetrics(String MACAddress, int timestamp);
+    
+    List<Metric> getAllMetrics(String MACAddress);
+    
+    User getUser(String id);
     
     List<User> getAllUsers();
+    
+    Boolean sendCommand(String MACAddress, String command);
+    
+    Device getCommand(String MACAddress);
+    
+    List<Metric> getMetricsByPeriod(String MACAddress, String period);
 }

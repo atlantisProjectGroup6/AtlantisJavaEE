@@ -63,6 +63,10 @@
                         <clientExclude>
                             com/atlantis/services/MobileServiceBean.class
                         </clientExclude>
+                        <!--exclusion de l'implémentation-->
+                        <clientExclude>
+                            com/atlantis/services/BackofficeServiceBean.class
+                        </clientExclude>
                         <!--exclusion du DAO-->
                         <clientExclude>
                             com/atlantis/**/dao/

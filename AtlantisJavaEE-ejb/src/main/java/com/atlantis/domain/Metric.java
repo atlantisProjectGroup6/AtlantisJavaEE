@@ -6,80 +6,101 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.List;
+import java.sql.Timestamp;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author charles
+ * @author miren
  */
 @Entity
-@Table(name="users")
+@Table(name="metrics")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+    
     //attributes
-    @Id
-    @Column(name="ID_User")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlElement
-    private String id;
+    @Column(name="ID_Metric")
+    private Integer id;
     
-    @Column(name="name")
+    @Column(name="Value")
     @XmlElement
-    private String name;
+    private String value;
+
+    @Column(name="Date")
+    @XmlElement
+    private Integer date;
     
-    //relations
-    @ManyToMany
+    @Column(name="AddressMAC_Device", updatable=false, insertable=false)
+    @XmlElement
+    private String addressMAC;
+    
+    //Relations 
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="AddressMAC_Device")
     @XmlTransient
-    @JoinTable(
-        name="Users_Devices",
-        joinColumns=@JoinColumn(name="UserID_User", referencedColumnName="ID_User"),
-        inverseJoinColumns=@JoinColumn(name="AddressMAC_DeviceU", referencedColumnName="MAC_Address"))
-    private List<Device> devices;
-
+    private Device device;
+    
     //getters and setters
+    public String getValue() {
+        return value;
+    }
 
-    public String getId() {
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Integer getDate() {
+        return date;
+    }
+
+    public void setDate(Integer date) {
+        this.date = date;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public List<Device> getDevices() {
-        return devices;
+    public Device getDevice() {
+        return device;
     }
 
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
-    public String getName() {
-        return name;
+    public String getAddressMAC() {
+        return addressMAC;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAddressMAC(String addressMAC) {
+        this.addressMAC = addressMAC;
     }
-       
-    //methods    
+
+    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -90,10 +111,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Metric)) {
             return false;
         }
-        User other = (User) object;
+        Metric other = (Metric) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -102,6 +123,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.User[ id=" + id + " ]";
+        return "com.atlantis.domain.Metric[ id=" + id + " ]";
     }
+    
 }

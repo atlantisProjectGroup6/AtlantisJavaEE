@@ -5,6 +5,7 @@
  */
 package com.atlantis.dao;
 
+import com.atlantis.domain.Metric;
 import java.util.List;
 
 /**
@@ -13,8 +14,10 @@ import java.util.List;
  */
 public interface CrudInterface {
    public <T> T create (T t);
-    public <T> T find(Class<T> type, Long id);//on retourne l'entité
+    public <T> T find(Class<T> type, Integer id);
+    public <T> T findStringId(Class<T> type, String id);
     public <T> T update(T t);
     public void delete(Object t);
-    public <T> List<T> findAll(Class<T> type); 
+    public <T> List<T> findAll(Class<T> type);
+    public List<Metric> findMetricsByPeriod(String MACAddress, Integer timestamp);
 }
