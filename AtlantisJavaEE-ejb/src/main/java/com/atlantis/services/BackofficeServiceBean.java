@@ -6,7 +6,9 @@
 package com.atlantis.services;
 
 import com.atlantis.dao.CrudInterface;
+import com.atlantis.domain.Admin;
 import com.atlantis.domain.Device;
+import com.atlantis.domain.Metric;
 import com.atlantis.domain.User;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -68,6 +70,42 @@ public class BackofficeServiceBean implements BackofficeServiceEndpointRemote {
 
     @Override
     public Boolean loginAdmin(String adminLogin, String adminPassword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Admin admin = dao.findStringId(Admin.class, adminLogin);
+        
+        if(admin != null){
+            if(adminPassword.equals(admin.getPassword())){
+                return true;
+            }
+        }
+        
+        return false;
     }    
+
+    @Override
+    public Boolean deleteUser(String userId) {
+        User user = dao.findStringId(User.class, userId);
+        if(user != null){
+            dao.delete(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean deleteDevice(String deviceMAC) {
+        Device device = dao.findStringId(Device.class, deviceMAC);
+        if(device != null){
+            
+//            List<Metric> deviceMetrics = device.getMetrics();
+//            if(deviceMetrics != null){
+//                deviceMetrics.forEach((metric) -> {
+//                    dao.delete(metric);
+//                });
+//            }
+            dao.delete(device);
+            
+            return true;
+        }
+        return false;
+    }
 }

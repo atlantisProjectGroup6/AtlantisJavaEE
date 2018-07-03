@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -38,7 +39,11 @@ public class User implements Serializable {
     @Column(name="ID_User")
     @XmlElement
     private String id;
-
+    
+    @Column(name="name")
+    @XmlElement
+    private String name;
+    
     //relations
     @ManyToMany
     @XmlTransient
@@ -64,6 +69,14 @@ public class User implements Serializable {
 
     public void setDevices(List<Device> devices) {
         this.devices = devices;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
        
     //methods    

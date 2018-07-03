@@ -26,9 +26,19 @@ public interface MobileServiceEndpointRemote {
     
     Boolean createAccount(String userId);
     
+    Boolean updateAccount(String userId, String name);
+    
     List<Metric> getLatestMetrics(String MACAddress, int timestamp);
     
-    User getUser(Integer id);
+    List<Metric> getAllMetrics(String MACAddress);
+    
+    User getUser(String id);
     
     List<User> getAllUsers();
+    
+    Boolean sendCommand(String MACAddress, String command);
+    
+    Device getCommand(String MACAddress);
+    
+    List<Metric> getMetricsByPeriod(String MACAddress, String period);
 }

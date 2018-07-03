@@ -28,4 +28,8 @@ public interface BackofficeServiceEndpointRemote {
     Boolean createAssociation(String deviceMAC, String idUser);
     
     Boolean loginAdmin(String adminLogin, String adminPassword);
+    
+    Boolean deleteUser(String userId);
+    
+    Boolean deleteDevice(String deviceMAC);
 }

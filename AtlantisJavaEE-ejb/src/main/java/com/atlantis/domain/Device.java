@@ -7,6 +7,7 @@ package com.atlantis.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,6 +49,10 @@ public class Device implements Serializable {
     @XmlElement
     private int typeId;
     
+    @Column(name="Command")
+    @XmlElement
+    private String command;
+    
     //Relations
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="TypeID_Type")
@@ -58,7 +63,7 @@ public class Device implements Serializable {
     @XmlTransient
     private List<User> users;
     
-    @OneToMany(mappedBy="device")
+    @OneToMany(mappedBy="device", cascade = CascadeType.ALL)
     @XmlTransient
     private List<Metric> metrics;   
 
@@ -102,6 +107,22 @@ public class Device implements Serializable {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
     }
 
     //methods

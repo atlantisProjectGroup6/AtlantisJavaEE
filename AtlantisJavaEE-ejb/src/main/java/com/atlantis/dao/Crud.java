@@ -5,10 +5,12 @@
  */
 package com.atlantis.dao;
 
+import com.atlantis.domain.Metric;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -62,5 +64,13 @@ public class Crud implements CrudInterface {
         cq.select(identificationVariable);
         TypedQuery<T> query = em.createQuery(cq);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Metric> findMetricsByPeriod(String MACAddress, Integer timestamp) {
+        Query query  = em.createQuery("SELECT m FROM Metric AS m WHERE m.addressMAC = :MACAddress AND m.date > :timestamp", Metric.class);
+        
+        
+        return (List<Metric>)query.setParameter("MACAddress", MACAddress).setParameter("timestamp", timestamp).getResultList();
     }
 }

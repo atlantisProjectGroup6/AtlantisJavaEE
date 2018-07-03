@@ -6,74 +6,53 @@
 package com.atlantis.domain;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author miren
+ * @author charles
  */
 @Entity
-@Table(name="types")
+@Table(name="admin")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Type implements Serializable {
+public class Admin implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    //attributes
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID_Type")
+    @Id
+    @Column(name="id")
     @XmlElement
-    private Integer id;
-
-    @Column(name="Type")
-    @XmlElement
-    private String type;
+    private String id;
     
-    //relations
-    @OneToMany(mappedBy="type")
-    @XmlTransient
-    private List<Device> devices;
+    @Column(name="password")
+    private String password;
 
-    //getters and setters
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public List<Device> getDevices() {
-        return devices;
+    public String getPassword() {
+        return password;
     }
 
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
-    //methods
     @Override
     public int hashCode() {
         int hash = 0;
@@ -84,10 +63,10 @@ public class Type implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Type)) {
+        if (!(object instanceof Admin)) {
             return false;
         }
-        Type other = (Type) object;
+        Admin other = (Admin) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -96,7 +75,7 @@ public class Type implements Serializable {
 
     @Override
     public String toString() {
-        return "com.atlantis.domain.Type[ id=" + id + " ]";
+        return "com.atlantis.domain.Admin[ id=" + id + " ]";
     }
     
 }

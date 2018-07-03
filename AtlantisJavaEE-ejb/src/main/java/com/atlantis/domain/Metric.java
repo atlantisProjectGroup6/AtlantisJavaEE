@@ -7,6 +7,7 @@ package com.atlantis.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,6 +49,10 @@ public class Metric implements Serializable {
     @XmlElement
     private Integer date;
     
+    @Column(name="AddressMAC_Device", updatable=false, insertable=false)
+    @XmlElement
+    private String addressMAC;
+    
     //Relations 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="AddressMAC_Device")
@@ -85,6 +90,14 @@ public class Metric implements Serializable {
 
     public void setDevice(Device device) {
         this.device = device;
+    }
+
+    public String getAddressMAC() {
+        return addressMAC;
+    }
+
+    public void setAddressMAC(String addressMAC) {
+        this.addressMAC = addressMAC;
     }
 
     //methods

@@ -125,4 +125,75 @@ public class BackofficeResource {
         }
         return resp;
     }
+    
+    @Path("admin/login")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response adminLogin(String content) {
+                
+        StringReader reader = new StringReader(content);
+        String adminLogin;
+        String adminPassword;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject associationInfo = jreader.readObject();
+            adminLogin = associationInfo.getString("adminLogin");
+            adminPassword = associationInfo.getString("adminPassword");
+        }
+        
+        Boolean isValid = backofficeService.loginAdmin(adminLogin, adminPassword);
+        
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("Association already exist.").build();
+        }
+        return resp;
+    }
+    
+    @Path("user/delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteUser(String content) {
+        StringReader reader = new StringReader(content);
+        String userId;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject associationInfo = jreader.readObject();
+            userId = associationInfo.getString("userId");
+        }
+        
+        Boolean isValid = backofficeService.deleteUser(userId);
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("User doesn't exist.").build();
+        }
+        return resp;
+    }
+    
+    @Path("device/delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteDevice(String content) {
+        StringReader reader = new StringReader(content);
+        String deviceMac;
+        try(JsonReader jreader = Json.createReader(reader)) {
+            JsonObject associationInfo = jreader.readObject();
+            deviceMac = associationInfo.getString("deviceMac");
+        }
+        
+        Boolean isValid = backofficeService.deleteDevice(deviceMac);
+        
+        Response resp = null;
+        if(isValid) {
+            resp = Response.accepted().build();
+        } else {
+            resp = Response.status(400).entity("Device doesn't exist.").build();
+        }
+        return resp;
+    }
 }
