@@ -55,9 +55,6 @@ public class Crud implements CrudInterface {
     
     @Override
     public <T> List<T> findAll(Class<T> type){
-        //utilisation de la généricité quasi impossible avec JPQL
-        //on comprend l'un des avantages d'une API "typée" (criteria) pour exécuter des requêtes JPA
-        
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(type);
         Root<T> identificationVariable = cq.from(type);
@@ -68,9 +65,7 @@ public class Crud implements CrudInterface {
 
     @Override
     public List<Metric> findMetricsByPeriod(String MACAddress, Integer timestamp) {
-        Query query  = em.createQuery("SELECT m FROM Metric AS m WHERE m.addressMAC = :MACAddress AND m.date > :timestamp", Metric.class);
-        
-        
+        Query query  = em.createQuery("SELECT m FROM Metric AS m WHERE m.addressMAC = :MACAddress AND m.date > :timestamp ORDER BY m.date DESC", Metric.class);        
         return (List<Metric>)query.setParameter("MACAddress", MACAddress).setParameter("timestamp", timestamp).getResultList();
     }
 }
