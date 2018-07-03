@@ -5,13 +5,11 @@
  */
 package com.atlantis.services;
 
-import com.atlantis.dao.CrudInterface;
 import com.atlantis.domain.Device;
 import com.atlantis.domain.Metric;
 import com.atlantis.domain.User;
 import java.util.List;
 import javax.ejb.Remote;
-import javax.inject.Inject;
 
 /**
  *

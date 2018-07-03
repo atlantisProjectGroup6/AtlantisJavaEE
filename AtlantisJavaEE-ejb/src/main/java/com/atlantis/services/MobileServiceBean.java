@@ -10,13 +10,11 @@ import com.atlantis.domain.Device;
 import com.atlantis.domain.Metric;
 import com.atlantis.domain.Type;
 import com.atlantis.domain.User;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 /**
  *
@@ -56,8 +54,7 @@ public class MobileServiceBean implements MobileServiceEndpointRemote {
         
         return true;
     }
-    
-    
+   
     @Override
     public List<Device> getUserDevices(String userId) {
         User user = dao.findStringId(User.class, userId);

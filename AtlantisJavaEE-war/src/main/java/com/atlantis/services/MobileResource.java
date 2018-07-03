@@ -16,7 +16,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
@@ -29,7 +28,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -133,32 +131,6 @@ public class MobileResource {
         return Response.ok(responseWrapper).build();
     }
     
-    @Path("latestMetrics")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getLatestMetrics(String content) {
-        StringReader reader = new StringReader(content);
-        String deviceMac;
-        int timestamp;
-        try(JsonReader jreader = Json.createReader(reader)) {
-            JsonArray array = jreader.readArray();
-            JsonObject userInfo = array.getJsonObject(0);
-            deviceMac = userInfo.getString("deviceMac");
-            timestamp = userInfo.getJsonNumber("timestamp").intValue();
-        }
-        
-        List<Metric> latestMetrics = mobileService.getLatestMetrics(deviceMac, timestamp);
-        
-        if(latestMetrics == null){
-            throw new NotFoundException();
-        }
-        
-        GenericEntity<List<Metric>> genericList = new GenericEntity<List<Metric>>(latestMetrics){};
-        
-        return Response.ok(genericList).build();
-    }
-    
     @Path("user/{userId}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -256,7 +228,7 @@ public class MobileResource {
     @Path("device/{deviceMac}/{period}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getDayMetrics (@PathParam("deviceMac") String deviceMac, @PathParam("period") String period) {
+    public Response getMetricsByPeriod (@PathParam("deviceMac") String deviceMac, @PathParam("period") String period) {
         List<Metric> allMetrics = mobileService.getMetricsByPeriod(deviceMac, period);
         
         if(allMetrics == null){
@@ -266,16 +238,5 @@ public class MobileResource {
         GenericEntity<List<Metric>> genericList = new GenericEntity<List<Metric>>(allMetrics){};
         
         return Response.ok(genericList).build();
-    }
-    
-    /**
-     * Retrieves representation of an instance of com.atlantis.services.MobileResource
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        String restMsg="{\"message\":\"hello REST\"}";
-        return restMsg;
     }
 }
